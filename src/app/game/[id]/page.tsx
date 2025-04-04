@@ -168,14 +168,17 @@ export default function GamePage() {
       }
     });
 
-    // Mark diagonal conflicts
+    // Mark adjacent conflicts (queens that are next to each other)
     for (let i = 0; i < queensPositions.length; i++) {
       for (let j = i + 1; j < queensPositions.length; j++) {
         const q1 = queensPositions[i];
         const q2 = queensPositions[j];
 
-        // Check if queens are diagonally adjacent
-        if (Math.abs(q1.row - q2.row) === Math.abs(q1.col - q2.col)) {
+        // Check if queens are adjacent (including diagonally adjacent)
+        const rowDiff = Math.abs(q1.row - q2.row);
+        const colDiff = Math.abs(q1.col - q2.col);
+
+        if (rowDiff <= 1 && colDiff <= 1) {
           boardCopy[q1.row][q1.col].hasError = true;
           boardCopy[q2.row][q2.col].hasError = true;
         }

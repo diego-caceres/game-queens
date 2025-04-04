@@ -63,6 +63,7 @@ export const GameBoard = ({
                       flex items-center justify-center
                       cursor-pointer
                       relative
+                      select-none
                     `}
                     style={{
                       aspectRatio: "1/1",
