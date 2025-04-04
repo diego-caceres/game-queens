@@ -46,7 +46,7 @@ export const GameBoard = ({
           </div>
 
           {/* Game board */}
-          <div className="flex-1 border-2 border-gray-700 rounded-lg overflow-hidden">
+          <div className="flex-1 border-4 border-gray-800 rounded-lg overflow-hidden">
             <div
               className={`grid`}
               style={{
@@ -60,8 +60,6 @@ export const GameBoard = ({
                   <div
                     key={`${rowIndex}-${colIndex}`}
                     className={`
-                      ${colors[cell.color - 1]}
-                      border border-gray-700
                       flex items-center justify-center
                       cursor-pointer
                       relative
@@ -70,6 +68,27 @@ export const GameBoard = ({
                       aspectRatio: "1/1",
                       height: "100%",
                       width: "100%",
+                      backgroundColor: colors[cell.color - 1],
+                      borderTop:
+                        rowIndex > 0 &&
+                        board[rowIndex - 1][colIndex].color !== cell.color
+                          ? "2px solid #000"
+                          : "1px solid #374151",
+                      borderRight:
+                        colIndex < size - 1 &&
+                        board[rowIndex][colIndex + 1].color !== cell.color
+                          ? "2px solid #000"
+                          : "1px solid #374151",
+                      borderBottom:
+                        rowIndex < size - 1 &&
+                        board[rowIndex + 1][colIndex].color !== cell.color
+                          ? "2px solid #000"
+                          : "1px solid #374151",
+                      borderLeft:
+                        colIndex > 0 &&
+                        board[rowIndex][colIndex - 1].color !== cell.color
+                          ? "2px solid #000"
+                          : "1px solid #374151",
                     }}
                     onClick={() => onCellClick(rowIndex, colIndex)}
                   >

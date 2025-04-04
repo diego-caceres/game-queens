@@ -36,7 +36,7 @@ export default function GamePage() {
       .map(() =>
         Array(gameConfig.size)
           .fill(null)
-          .map(() => ({ state: "empty", color: 0, hasError: false }))
+          .map(() => ({ state: "empty", color: 1, hasError: false }))
       );
 
     // Apply color layout

@@ -45,14 +45,14 @@ export const gameConfigs: GameConfig[] = [
     description: "A diverse 8x8 board with multiple colored regions",
     size: 8,
     colors: [
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-green-200", // Light green
-      "bg-red-200", // Light red
-      "bg-purple-200", // Light purple
-      "bg-yellow-200", // Light yellow
-      "bg-gray-300", // Light gray
-      "bg-stone-400", // Dark gray/brown
+      "#60a5fa", // Blue
+      "#f87171", // Red
+      "#4ade80", // Green
+      "#c084fc", // Purple
+      "#fde047", // Yellow
+      "#f472b6", // Pink
+      "#fb923c", // Orange
+      "#9ca3af", // Gray
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 2, 2, 2],
@@ -83,15 +83,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A difficult 9x9 board with complex color patterns",
     size: 9,
     colors: [
-      "bg-green-200", // Light green
-      "bg-amber-200", // Light orange
-      "bg-red-200", // Light red
-      "bg-blue-200", // Light blue
-      "bg-purple-200", // Light purple
-      "bg-yellow-200", // Light yellow
-      "bg-gray-300", // Light gray
-      "bg-stone-400", // Dark gray/brown
-      "bg-rose-300", // Light rose
+      "#4ade80", // Green
+      "#fb923c", // Orange
+      "#f87171", // Red
+      "#60a5fa", // Blue
+      "#c084fc", // Purple
+      "#fde047", // Yellow
+      "#9ca3af", // Gray
+      "#8b5cf6", // Dark gray
+      "#f472b6", // Pink
     ],
     initialColorLayout: [
       [3, 3, 3, 4, 5, 5, 5, 3, 3],
@@ -124,16 +124,16 @@ export const gameConfigs: GameConfig[] = [
     description: "A regal 10x10 board with purple and blue tones",
     size: 10,
     colors: [
-      "bg-purple-200", // Light purple
-      "bg-blue-200", // Light blue
-      "bg-green-200", // Light green
-      "bg-yellow-200", // Light yellow
-      "bg-rose-300", // Light rose
-      "bg-red-200", // Light red
-      "bg-amber-200", // Light orange
-      "bg-gray-300", // Light gray
-      "bg-cyan-200", // Light cyan
-      "bg-stone-400", // Dark gray/brown
+      "#c084fc", // Purple
+      "#60a5fa", // Blue
+      "#4ade80", // Green
+      "#fde047", // Yellow
+      "#f472b6", // Pink
+      "#f87171", // Red
+      "#fb923c", // Orange
+      "#9ca3af", // Gray
+      "#06b6d4", // Cyan
+      "#8b5cf6", // Dark gray
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 8, 9, 9],
@@ -168,13 +168,13 @@ export const gameConfigs: GameConfig[] = [
     description: "A smaller 7x7 board with soft pastel colors",
     size: 7,
     colors: [
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-green-200", // Light green
-      "bg-gray-300", // Light gray
-      "bg-yellow-200", // Light yellow
-      "bg-purple-200", // Light purple
-      "bg-red-200", // Light red
+      "#60a5fa", // Blue
+      "#f87171", // Red
+      "#4ade80", // Green
+      "#9ca3af", // Gray
+      "#fde047", // Yellow
+      "#c084fc", // Purple
+      "#f472b6", // Pink
     ],
     initialColorLayout: [
       [1, 1, 1, 4, 5, 5, 5],
@@ -203,15 +203,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board with dominant purple regions",
     size: 9,
     colors: [
-      "bg-purple-200", // Light purple
-      "bg-yellow-200", // Light yellow
-      "bg-green-200", // Light green
-      "bg-red-200", // Light red
-      "bg-blue-200", // Light blue
-      "bg-amber-200", // Light orange
-      "bg-gray-300", // Light gray
-      "bg-stone-400", // Dark gray/brown
-      "bg-rose-300", // Light rose
+      "#c084fc", // Purple
+      "#fde047", // Yellow
+      "#4ade80", // Green
+      "#f87171", // Red
+      "#60a5fa", // Blue
+      "#fb923c", // Orange
+      "#9ca3af", // Gray
+      "#8b5cf6", // Dark gray
+      "#f472b6", // Pink
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 9, 9, 9],
@@ -244,14 +244,14 @@ export const gameConfigs: GameConfig[] = [
     description: "An 8x8 board with autumn-inspired color patterns",
     size: 8,
     colors: [
-      "bg-purple-200", // Light purple
-      "bg-red-200", // Light red
-      "bg-gray-300", // Light gray
-      "bg-green-200", // Light green
-      "bg-yellow-200", // Light yellow
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-stone-400", // Dark gray/brown
+      "#c084fc", // Purple
+      "#f87171", // Red
+      "#9ca3af", // Gray
+      "#4ade80", // Green
+      "#fde047", // Yellow
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
+      "#8b5cf6", // Dark gray
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 7, 7],
@@ -282,14 +282,14 @@ export const gameConfigs: GameConfig[] = [
     description: "An 8x8 board with geometric color patterns",
     size: 8,
     colors: [
-      "bg-gray-300", // Light gray
-      "bg-blue-200", // Light blue
-      "bg-green-200", // Light green
-      "bg-red-200", // Light red
-      "bg-yellow-200", // Light yellow
-      "bg-purple-200", // Light purple
-      "bg-amber-200", // Light orange
-      "bg-stone-400", // Dark gray/brown
+      "#9ca3af", // Gray
+      "#60a5fa", // Blue
+      "#4ade80", // Green
+      "#f87171", // Red
+      "#fde047", // Yellow
+      "#c084fc", // Purple
+      "#fb923c", // Orange
+      "#8b5cf6", // Dark gray
     ],
     initialColorLayout: [
       [1, 2, 3, 3, 3, 3, 3, 3],
@@ -320,17 +320,17 @@ export const gameConfigs: GameConfig[] = [
     description: "A large 11x11 board with ocean-inspired colors",
     size: 11,
     colors: [
-      "bg-cyan-200", // Light cyan
-      "bg-purple-200", // Light purple
-      "bg-red-200", // Light red
-      "bg-green-200", // Light green
-      "bg-rose-300", // Light rose
-      "bg-gray-300", // Light gray
-      "bg-yellow-200", // Light yellow
-      "bg-stone-400", // Dark gray/brown
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-emerald-200", // Light emerald
+      "#06b6d4", // Cyan
+      "#c084fc", // Purple
+      "#f87171", // Red
+      "#4ade80", // Green
+      "#f472b6", // Pink
+      "#9ca3af", // Gray
+      "#fde047", // Yellow
+      "#8b5cf6", // Dark gray
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
+      "#15a36f", // Emerald
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -367,16 +367,16 @@ export const gameConfigs: GameConfig[] = [
     description: "A colorful 10x10 board with vibrant regions",
     size: 10,
     colors: [
-      "bg-red-200", // Light red
-      "bg-blue-200", // Light blue
-      "bg-purple-200", // Light purple
-      "bg-green-200", // Light green
-      "bg-yellow-200", // Light yellow
-      "bg-rose-300", // Light rose
-      "bg-amber-200", // Light orange
-      "bg-gray-300", // Light gray
-      "bg-stone-400", // Dark gray/brown
-      "bg-cyan-200", // Light cyan
+      "#f87171", // Red
+      "#60a5fa", // Blue
+      "#c084fc", // Purple
+      "#4ade80", // Green
+      "#fde047", // Yellow
+      "#f472b6", // Pink
+      "#fb923c", // Orange
+      "#9ca3af", // Gray
+      "#8b5cf6", // Dark gray
+      "#06b6d4", // Cyan
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -411,14 +411,14 @@ export const gameConfigs: GameConfig[] = [
     description: "An 8x8 board with contrasting blue and orange colors",
     size: 8,
     colors: [
-      "bg-blue-200", // Light blue
-      "bg-amber-200", // Light orange
-      "bg-purple-200", // Light purple
-      "bg-gray-300", // Light gray
-      "bg-yellow-200", // Light yellow
-      "bg-green-200", // Light green
-      "bg-stone-400", // Dark gray/brown
-      "bg-red-200", // Light red
+      "#60a5fa", // Blue
+      "#fb923c", // Orange
+      "#c084fc", // Purple
+      "#9ca3af", // Gray
+      "#fde047", // Yellow
+      "#4ade80", // Green
+      "#8b5cf6", // Dark gray
+      "#f87171", // Red
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1],
@@ -449,15 +449,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board with sunset-inspired color scheme",
     size: 9,
     colors: [
-      "bg-yellow-200", // Light yellow
-      "bg-red-200", // Light red
-      "bg-purple-200", // Light purple
-      "bg-blue-200", // Light blue
-      "bg-gray-300", // Light gray
-      "bg-green-200", // Light green
-      "bg-amber-200", // Light orange
-      "bg-stone-400", // Dark gray/brown
-      "bg-rose-300", // Light rose
+      "#fde047", // Yellow
+      "#f87171", // Red
+      "#c084fc", // Purple
+      "#60a5fa", // Blue
+      "#9ca3af", // Gray
+      "#4ade80", // Green
+      "#fb923c", // Orange
+      "#8b5cf6", // Dark gray
+      "#f472b6", // Pink
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 9],
@@ -490,15 +490,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board with prominent pink and pastel regions",
     size: 9,
     colors: [
-      "bg-rose-300", // Light rose
-      "bg-gray-300", // Light gray
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-purple-200", // Light purple
-      "bg-green-200", // Light green
-      "bg-yellow-200", // Light yellow
-      "bg-red-200", // Light red
-      "bg-stone-400", // Dark gray/brown
+      "#f472b6", // Pink
+      "#9ca3af", // Gray
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
+      "#c084fc", // Purple
+      "#4ade80", // Green
+      "#fde047", // Yellow
+      "#f87171", // Red
+      "#8b5cf6", // Dark gray
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -531,15 +531,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board inspired by forests and lakes",
     size: 9,
     colors: [
-      "bg-red-200", // Light red
-      "bg-green-200", // Light green
-      "bg-gray-300", // Light gray
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-purple-200", // Light purple
-      "bg-yellow-200", // Light yellow
-      "bg-stone-400", // Dark gray/brown
-      "bg-rose-300", // Light rose
+      "#f87171", // Red
+      "#4ade80", // Green
+      "#9ca3af", // Gray
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
+      "#c084fc", // Purple
+      "#fde047", // Yellow
+      "#8b5cf6", // Dark gray
+      "#f472b6", // Pink
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -571,14 +571,14 @@ export const gameConfigs: GameConfig[] = [
     description: "An 8x8 board with landscapes inspired by nature",
     size: 8,
     colors: [
-      "bg-purple-200", // Light purple
-      "bg-stone-400", // Dark gray/brown
-      "bg-gray-300", // Light gray
-      "bg-red-200", // Light red
-      "bg-yellow-200", // Light yellow
-      "bg-green-200", // Light green
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
+      "#c084fc", // Purple
+      "#8b5cf6", // Dark gray
+      "#9ca3af", // Gray
+      "#f87171", // Red
+      "#fde047", // Yellow
+      "#4ade80", // Green
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 7, 7],
@@ -609,15 +609,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board with rosy and green floral patterns",
     size: 9,
     colors: [
-      "bg-rose-300", // Light rose
-      "bg-green-200", // Light green
-      "bg-gray-300", // Light gray
-      "bg-stone-400", // Dark gray/brown
-      "bg-yellow-200", // Light yellow
-      "bg-blue-200", // Light blue
-      "bg-amber-200", // Light orange
-      "bg-purple-200", // Light purple
-      "bg-red-200", // Light red
+      "#f472b6", // Pink
+      "#9ca3af", // Gray
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
+      "#c084fc", // Purple
+      "#4ade80", // Green
+      "#fde047", // Yellow
+      "#8b5cf6", // Dark gray
+      "#f87171", // Red
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 7],
@@ -650,15 +650,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board with lavender and countryside colors",
     size: 9,
     colors: [
-      "bg-purple-200", // Light purple
-      "bg-amber-200", // Light orange
-      "bg-blue-200", // Light blue
-      "bg-gray-300", // Light gray
-      "bg-yellow-200", // Light yellow
-      "bg-green-200", // Light green
-      "bg-red-200", // Light red
-      "bg-stone-400", // Dark gray/brown
-      "bg-rose-300", // Light rose
+      "#c084fc", // Purple
+      "#fb923c", // Orange
+      "#60a5fa", // Blue
+      "#9ca3af", // Gray
+      "#fde047", // Yellow
+      "#4ade80", // Green
+      "#f87171", // Red
+      "#8b5cf6", // Dark gray
+      "#f472b6", // Pink
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -691,16 +691,16 @@ export const gameConfigs: GameConfig[] = [
     description: "A 10x10 board with mystical garden-inspired colors",
     size: 10,
     colors: [
-      "bg-purple-200", // Light purple
-      "bg-rose-300", // Light rose
-      "bg-amber-200", // Light orange
-      "bg-green-200", // Light green
-      "bg-yellow-200", // Light yellow
-      "bg-blue-200", // Light blue
-      "bg-red-200", // Light red
-      "bg-gray-300", // Light gray
-      "bg-stone-400", // Dark gray/brown
-      "bg-cyan-200", // Light cyan
+      "#c084fc", // Purple
+      "#f472b6", // Pink
+      "#fb923c", // Orange
+      "#4ade80", // Green
+      "#fde047", // Yellow
+      "#60a5fa", // Blue
+      "#f87171", // Red
+      "#9ca3af", // Gray
+      "#8b5cf6", // Dark gray
+      "#06b6d4", // Cyan
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -735,15 +735,15 @@ export const gameConfigs: GameConfig[] = [
     description: "A 9x9 board with rich crimson and purple regions",
     size: 9,
     colors: [
-      "bg-red-200", // Light red
-      "bg-purple-200", // Light purple
-      "bg-yellow-200", // Light yellow
-      "bg-gray-300", // Light gray
-      "bg-blue-200", // Light blue
-      "bg-amber-200", // Light orange
-      "bg-green-200", // Light green
-      "bg-rose-300", // Light rose
-      "bg-stone-400", // Dark gray/brown
+      "#f87171", // Red
+      "#c084fc", // Purple
+      "#fde047", // Yellow
+      "#9ca3af", // Gray
+      "#60a5fa", // Blue
+      "#fb923c", // Orange
+      "#4ade80", // Green
+      "#f472b6", // Pink
+      "#8b5cf6", // Dark gray
     ],
     initialColorLayout: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
