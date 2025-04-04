@@ -5,6 +5,7 @@ interface GameBoardProps {
   board: Cell[][];
   size: number;
   colors: string[];
+  hasWon: boolean;
   onCellClick: (row: number, col: number) => void;
 }
 
@@ -12,6 +13,7 @@ export const GameBoard = ({
   board,
   size,
   colors,
+  hasWon,
   onCellClick,
 }: GameBoardProps) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -248,11 +250,21 @@ export const GameBoard = ({
                             cell.hasError ? "relative" : ""
                           }`}
                         >
-                          <img
-                            src="/crown.svg"
-                            alt="Queen"
-                            className="w-6 h-6"
-                          />
+                          {hasWon ? (
+                            // Show crown SVG with animation when game is won
+                            <div className="animate-queen-to-crown">
+                              <img
+                                src="/crown.svg"
+                                alt="Crown"
+                                className="w-6 h-6 animate-bounce-once"
+                              />
+                            </div>
+                          ) : (
+                            // Show alchemical symbol during play
+                            <span className="text-2xl font-bold text-black flex items-center justify-center h-full">
+                              🜲
+                            </span>
+                          )}
 
                           {/* Error indicator */}
                           {cell.hasError && (

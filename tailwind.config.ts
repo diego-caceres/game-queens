@@ -43,6 +43,17 @@ export default {
           400: "#34d399",
         },
       },
+      animation: {
+        "queen-to-crown": "queen-to-crown 0.8s ease-in-out forwards",
+        "bounce-once": "bounce 1s ease-in-out 0.8s",
+      },
+      keyframes: {
+        "queen-to-crown": {
+          "0%": { transform: "scale(1) rotate(0deg)", opacity: "0.5" },
+          "50%": { transform: "scale(1.5) rotate(180deg)", opacity: "0.8" },
+          "100%": { transform: "scale(1) rotate(360deg)", opacity: "1" },
+        },
+      },
     },
   },
   plugins: [],

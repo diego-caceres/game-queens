@@ -376,6 +376,7 @@ export default function GamePage() {
           board={board}
           size={gameConfig.size}
           colors={gameConfig.colors}
+          hasWon={hasWon}
           onCellClick={handleCellClick}
         />
 
