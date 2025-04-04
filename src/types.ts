@@ -22,3 +22,13 @@ export type GameState = {
   board: BoardState;
   gameOver: boolean;
 };
+
+export type GameConfig = {
+  id: string;
+  name: string;
+  description: string;
+  size: number;
+  colors: string[];
+  initialColorLayout: number[][];
+  solution: CellPosition[];
+};

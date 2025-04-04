@@ -12,6 +12,9 @@ export interface Position {
 }
 
 export interface GameConfig {
+  id: string;
+  name: string;
+  description: string;
   size: number;
   colors: string[];
   initialColorLayout: number[][];
