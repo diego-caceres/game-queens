@@ -1,6 +1,6 @@
 import { GameConfig } from "../components/types";
 
-export const gameConfigs: GameConfig[] = [
+const defaultConfigs: GameConfig[] = [
   // Screenshot 1 (8x8 board with green, blue, orange regions)
   {
     id: "mixed-regions-8x8-1",
@@ -39,3 +39,22 @@ export const gameConfigs: GameConfig[] = [
     ],
   },
 ];
+
+// Load configs from localStorage or use defaults
+const loadConfigs = (): GameConfig[] => {
+  if (typeof window === "undefined") return defaultConfigs;
+
+  const savedConfigs = localStorage.getItem("gameConfigs");
+  return savedConfigs ? JSON.parse(savedConfigs) : defaultConfigs;
+};
+
+export const gameConfigs = loadConfigs();
+
+export const saveNewConfig = (config: GameConfig) => {
+  const currentConfigs = loadConfigs();
+  const newConfigs = [...currentConfigs, config];
+  localStorage.setItem("gameConfigs", JSON.stringify(newConfigs));
+  // Update the exported configs array
+  gameConfigs.length = 0;
+  gameConfigs.push(...newConfigs);
+};

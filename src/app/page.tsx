@@ -8,7 +8,15 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">Queens Game</h1>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-4xl font-bold text-gray-900">Queens Game</h1>
+            <Link
+              href="/create"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Create New Board
+            </Link>
+          </div>
           <p className="text-xl text-gray-600 mb-12">
             Select a board to start playing
           </p>

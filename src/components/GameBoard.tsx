@@ -1,4 +1,5 @@
 import { Cell } from "./types";
+import { useState, useCallback } from "react";
 
 interface GameBoardProps {
   board: Cell[][];
@@ -13,6 +14,50 @@ export const GameBoard = ({
   colors,
   onCellClick,
 }: GameBoardProps) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [lastDraggedCell, setLastDraggedCell] = useState<{
+    row: number;
+    col: number;
+  } | null>(null);
+
+  const handleDragStart = useCallback(
+    (row: number, col: number, e: React.MouseEvent | React.TouchEvent) => {
+      // Handle drag start only on left mouse button or touch
+      if (
+        (e.type === "mousedown" && (e as React.MouseEvent).buttons === 1) ||
+        e.type === "touchstart"
+      ) {
+        // Only start dragging on empty cells
+        if (board[row][col].state === null) {
+          setIsDragging(true);
+          onCellClick(row, col);
+          setLastDraggedCell({ row, col });
+        }
+      }
+    },
+    [board, onCellClick]
+  );
+
+  const handleDrag = useCallback(
+    (row: number, col: number) => {
+      if (
+        isDragging &&
+        lastDraggedCell &&
+        (lastDraggedCell.row !== row || lastDraggedCell.col !== col) &&
+        board[row][col].state === null
+      ) {
+        onCellClick(row, col);
+        setLastDraggedCell({ row, col });
+      }
+    },
+    [isDragging, lastDraggedCell, board, onCellClick]
+  );
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+    setLastDraggedCell(null);
+  }, []);
+
   return (
     <div className="flex justify-center">
       <div className="relative w-full max-w-md">
@@ -46,9 +91,14 @@ export const GameBoard = ({
           </div>
 
           {/* Game board */}
-          <div className="flex-1 border-4 border-gray-800 rounded-lg overflow-hidden">
+          <div
+            className="flex-1 border-4 border-gray-800 rounded-lg overflow-hidden"
+            onMouseLeave={handleDragEnd}
+            onTouchEnd={handleDragEnd}
+            onContextMenu={(e) => e.preventDefault()}
+          >
             <div
-              className={`grid`}
+              className="grid touch-none"
               style={{
                 aspectRatio: "1/1",
                 gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
@@ -91,9 +141,34 @@ export const GameBoard = ({
                           ? "2px solid #000"
                           : "1px solid #374151",
                     }}
-                    onClick={() => onCellClick(rowIndex, colIndex)}
+                    onMouseDown={(e) => handleDragStart(rowIndex, colIndex, e)}
+                    onClick={() => {
+                      if (!isDragging) {
+                        onCellClick(rowIndex, colIndex);
+                      }
+                    }}
+                    onMouseEnter={() => handleDrag(rowIndex, colIndex)}
+                    onMouseUp={handleDragEnd}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      handleDragStart(rowIndex, colIndex, e);
+                    }}
+                    onTouchMove={(e) => {
+                      e.preventDefault();
+                      const touch = e.touches[0];
+                      const element = document.elementFromPoint(
+                        touch.clientX,
+                        touch.clientY
+                      );
+                      const cellCoords = element?.getAttribute("data-coords");
+                      if (cellCoords) {
+                        const [row, col] = cellCoords.split("-").map(Number);
+                        handleDrag(row, col);
+                      }
+                    }}
+                    data-coords={`${rowIndex}-${colIndex}`}
                   >
-                    {/* Cell content with absolute positioning to prevent affecting layout */}
+                    {/* Cell content */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       {cell.state === "marked" && (
                         <span className="text-gray-700 text-xl">×</span>
