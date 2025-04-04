@@ -48,8 +48,12 @@ export const GameBoard = ({
           {/* Game board */}
           <div className="flex-1 border-2 border-gray-700 rounded-lg overflow-hidden">
             <div
-              className="grid grid-cols-8 grid-rows-8"
-              style={{ aspectRatio: "1/1" }}
+              className={`grid`}
+              style={{
+                aspectRatio: "1/1",
+                gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
+                gridTemplateRows: `repeat(${size}, minmax(0, 1fr))`,
+              }}
             >
               {board.map((row, rowIndex) =>
                 row.map((cell, colIndex) => (
