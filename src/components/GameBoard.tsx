@@ -1,5 +1,5 @@
 import { Cell } from "./types";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface GameBoardProps {
   board: Cell[][];
@@ -19,38 +19,125 @@ export const GameBoard = ({
     row: number;
     col: number;
   } | null>(null);
+  const [isProcessingClick, setIsProcessingClick] = useState(false);
 
-  const handleDragStart = useCallback(
-    (row: number, col: number, e: React.MouseEvent | React.TouchEvent) => {
-      // Handle drag start only on left mouse button or touch
-      if (
-        (e.type === "mousedown" && (e as React.MouseEvent).buttons === 1) ||
-        e.type === "touchstart"
-      ) {
-        // Only start dragging on empty cells
-        if (board[row][col].state === null) {
-          setIsDragging(true);
+  // Add a ref to the board container
+  const boardRef = useRef<HTMLDivElement>(null);
+
+  // Set up non-passive touch event handlers
+  useEffect(() => {
+    const boardElement = boardRef.current;
+    if (!boardElement) return;
+
+    // Options for event listeners (makes them non-passive)
+    const options = { passive: false };
+
+    // Function to handle touch move events
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+
+      if (!isDragging) return;
+
+      const touch = e.touches[0];
+      const element = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY
+      ) as HTMLElement;
+
+      const cellCoords = element?.getAttribute("data-coords");
+      if (cellCoords) {
+        const [row, col] = cellCoords.split("-").map(Number);
+
+        if (
+          lastDraggedCell &&
+          (lastDraggedCell.row !== row || lastDraggedCell.col !== col) &&
+          board[row][col].state === "empty"
+        ) {
           onCellClick(row, col);
           setLastDraggedCell({ row, col });
         }
       }
-    },
-    [board, onCellClick]
-  );
+    };
 
-  const handleDrag = useCallback(
-    (row: number, col: number) => {
+    // Add event listeners
+    boardElement.addEventListener("touchmove", handleTouchMove, options);
+
+    // Cleanup
+    return () => {
+      boardElement.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [isDragging, lastDraggedCell, board, onCellClick]);
+
+  // Dedicated function to handle all cell interactions
+  const handleCellInteraction = useCallback(
+    (row: number, col: number, interactionType: "click" | "drag") => {
+      // For clicks, make sure we're not already processing a click or drag
+      if (interactionType === "click" && (isDragging || isProcessingClick)) {
+        return;
+      }
+
+      // For drags, only process empty cells after the initial cell
       if (
-        isDragging &&
+        interactionType === "drag" &&
         lastDraggedCell &&
         (lastDraggedCell.row !== row || lastDraggedCell.col !== col) &&
-        board[row][col].state === null
+        board[row][col].state !== "empty"
       ) {
+        return;
+      }
+
+      // Process the cell interaction
+      if (interactionType === "click") {
+        setIsProcessingClick(true);
+        onCellClick(row, col);
+        // Reset the flag after a small delay to catch any duplicate events
+        setTimeout(() => setIsProcessingClick(false), 50);
+      } else if (interactionType === "drag") {
         onCellClick(row, col);
         setLastDraggedCell({ row, col });
       }
     },
-    [isDragging, lastDraggedCell, board, onCellClick]
+    [isDragging, isProcessingClick, lastDraggedCell, board, onCellClick]
+  );
+
+  const handleMouseDown = useCallback(
+    (row: number, col: number, e: React.MouseEvent) => {
+      // Only handle left mouse button
+      if (e.buttons !== 1) return;
+
+      // Prevent default to avoid text selection
+      e.preventDefault();
+
+      // Only start dragging on empty cells
+      if (board[row][col].state === "empty") {
+        setIsDragging(true);
+        handleCellInteraction(row, col, "drag");
+      } else {
+        // For non-empty cells, just handle it as a regular click
+        handleCellInteraction(row, col, "click");
+      }
+    },
+    [board, handleCellInteraction]
+  );
+
+  const handleTouchStart = useCallback(
+    (row: number, col: number, e: React.TouchEvent) => {
+      // Prevent default behavior
+      e.stopPropagation();
+
+      // Process the touch as a click
+      handleCellInteraction(row, col, "click");
+    },
+    [handleCellInteraction]
+  );
+
+  const handleMouseEnter = useCallback(
+    (row: number, col: number) => {
+      if (isDragging) {
+        handleCellInteraction(row, col, "drag");
+      }
+    },
+    [isDragging, handleCellInteraction]
   );
 
   const handleDragEnd = useCallback(() => {
@@ -92,13 +179,15 @@ export const GameBoard = ({
 
           {/* Game board */}
           <div
+            ref={boardRef}
             className="flex-1 border-4 border-gray-800 rounded-lg overflow-hidden"
             onMouseLeave={handleDragEnd}
+            onMouseUp={handleDragEnd}
             onTouchEnd={handleDragEnd}
             onContextMenu={(e) => e.preventDefault()}
           >
             <div
-              className="grid touch-none"
+              className="grid"
               style={{
                 aspectRatio: "1/1",
                 gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
@@ -141,31 +230,11 @@ export const GameBoard = ({
                           ? "2px solid #000"
                           : "1px solid #374151",
                     }}
-                    onMouseDown={(e) => handleDragStart(rowIndex, colIndex, e)}
-                    onClick={() => {
-                      if (!isDragging) {
-                        onCellClick(rowIndex, colIndex);
-                      }
-                    }}
-                    onMouseEnter={() => handleDrag(rowIndex, colIndex)}
-                    onMouseUp={handleDragEnd}
-                    onTouchStart={(e) => {
-                      e.preventDefault();
-                      handleDragStart(rowIndex, colIndex, e);
-                    }}
-                    onTouchMove={(e) => {
-                      e.preventDefault();
-                      const touch = e.touches[0];
-                      const element = document.elementFromPoint(
-                        touch.clientX,
-                        touch.clientY
-                      );
-                      const cellCoords = element?.getAttribute("data-coords");
-                      if (cellCoords) {
-                        const [row, col] = cellCoords.split("-").map(Number);
-                        handleDrag(row, col);
-                      }
-                    }}
+                    onMouseDown={(e) => handleMouseDown(rowIndex, colIndex, e)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onTouchStart={(e) =>
+                      handleTouchStart(rowIndex, colIndex, e)
+                    }
                     data-coords={`${rowIndex}-${colIndex}`}
                   >
                     {/* Cell content */}
