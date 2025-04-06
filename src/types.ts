@@ -32,3 +32,15 @@ export type GameConfig = {
   initialColorLayout: number[][];
   solution: CellPosition[];
 };
+
+export interface CompletedGame {
+  gameId: string;
+  completionTime: number;
+  completedAt: string;
+}
+
+export interface GameStats {
+  bestTime: number;
+  lastCompletedAt: string;
+  timesCompleted: number;
+}

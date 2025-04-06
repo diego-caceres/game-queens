@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Confetti from "react-dom-confetti";
 import { useRouter, useParams } from "next/navigation";
+import { log } from "../../../utils/environment";
 import { GameBoard } from "../../../components/GameBoard";
 import { Header } from "../../../components/Header";
 import { Timer } from "../../../components/Timer";
@@ -76,8 +77,33 @@ export default function GamePage() {
     if (hasWon) {
       // Set a flag to prevent duplicate modals
       setShowWinMessage(true);
+      
+      // Save completion data
+      const completedGame = {
+        gameId,
+        completionTime: timer,
+        completedAt: new Date().toISOString(),
+      };
+
+      // Get existing stats
+      const statsStr = localStorage.getItem(`game-stats-${gameId}`);
+      const stats = statsStr ? JSON.parse(statsStr) : {
+        bestTime: timer,
+        lastCompletedAt: completedGame.completedAt,
+        timesCompleted: 0
+      };
+
+      // Update stats
+      stats.timesCompleted++;
+      stats.lastCompletedAt = completedGame.completedAt;
+      if (timer < stats.bestTime) {
+        stats.bestTime = timer;
+      }
+
+      // Save updated stats
+      localStorage.setItem(`game-stats-${gameId}`, JSON.stringify(stats));
     }
-  }, [hasWon]);
+  }, [hasWon, gameId, timer]);
 
   if (!gameConfig) {
     return (
@@ -208,7 +234,7 @@ export default function GamePage() {
 
     // Log conflicts for debugging
     if (hasConflicts) {
-      console.log("Conflicts detected:", {
+      log("Conflicts detected:", {
         queensPositions,
         queensByColor,
         queensByRow,
@@ -375,7 +401,7 @@ export default function GamePage() {
     );
 
     // Debugging log
-    console.log("Win condition checks:", {
+    log("Win condition checks:", {
       correctColorCount,
       correctRowCount,
       correctColCount,

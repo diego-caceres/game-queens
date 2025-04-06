@@ -1,4 +1,5 @@
 import { Cell, Position } from "./types";
+import { log } from "../utils/environment";
 
 interface DeveloperToolsProps {
   board: Cell[][];
@@ -22,7 +23,7 @@ export const DeveloperTools = ({
           Show Solution
         </button>
         <button
-          onClick={() => console.log(board)}
+          onClick={() => log(board)}
           className="px-4 py-2 bg-green-600 rounded hover:bg-green-700 transition-colors"
         >
           Log Board State
