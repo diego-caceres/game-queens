@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { gameConfigs } from "../games/gameConfigs";
-import { isDevelopment } from "../utils/environment";
+import { isDevelopment, log } from "../utils/environment";
 
 export default function Home() {
   const formatTime = (seconds: number): string => {
@@ -12,10 +12,12 @@ export default function Home() {
   };
 
   const getGameStats = (gameId: string) => {
+    if (typeof window === 'undefined') return null;
     const statsStr = localStorage.getItem(`game-stats-${gameId}`);
     return statsStr ? JSON.parse(statsStr) : null;
   };
 
+  log("Game Configs", gameConfigs);
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -63,11 +65,15 @@ export default function Home() {
                       <div className="text-sm text-gray-500 border-t pt-2 mt-2">
                         <div className="flex justify-between">
                           <span>Best Time:</span>
-                          <span className="font-medium">{formatTime(stats.bestTime)}</span>
+                          <span className="font-medium">
+                            {formatTime(stats.bestTime)}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Times Completed:</span>
-                          <span className="font-medium">{stats.timesCompleted}</span>
+                          <span className="font-medium">
+                            {stats.timesCompleted}
+                          </span>
                         </div>
                       </div>
                     )}

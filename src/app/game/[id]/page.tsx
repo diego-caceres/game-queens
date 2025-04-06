@@ -85,23 +85,25 @@ export default function GamePage() {
         completedAt: new Date().toISOString(),
       };
 
-      // Get existing stats
-      const statsStr = localStorage.getItem(`game-stats-${gameId}`);
-      const stats = statsStr ? JSON.parse(statsStr) : {
-        bestTime: timer,
-        lastCompletedAt: completedGame.completedAt,
-        timesCompleted: 0
-      };
+      if (typeof window !== 'undefined') {
+        // Get existing stats
+        const statsStr = localStorage.getItem(`game-stats-${gameId}`);
+        const stats = statsStr ? JSON.parse(statsStr) : {
+          bestTime: timer,
+          lastCompletedAt: completedGame.completedAt,
+          timesCompleted: 0
+        };
 
-      // Update stats
-      stats.timesCompleted++;
-      stats.lastCompletedAt = completedGame.completedAt;
-      if (timer < stats.bestTime) {
-        stats.bestTime = timer;
+        // Update stats
+        stats.timesCompleted++;
+        stats.lastCompletedAt = completedGame.completedAt;
+        if (timer < stats.bestTime) {
+          stats.bestTime = timer;
+        }
+
+        // Save updated stats
+        localStorage.setItem(`game-stats-${gameId}`, JSON.stringify(stats));
       }
-
-      // Save updated stats
-      localStorage.setItem(`game-stats-${gameId}`, JSON.stringify(stats));
     }
   }, [hasWon, gameId, timer]);
 
