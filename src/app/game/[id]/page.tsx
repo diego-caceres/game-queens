@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import Confetti from "react-dom-confetti";
+import { useRouter, useParams } from "next/navigation";
 import { GameBoard } from "../../../components/GameBoard";
 import { Header } from "../../../components/Header";
 import { Timer } from "../../../components/Timer";
@@ -14,9 +14,12 @@ import { Cell, Position } from "../../../components/types";
 import { gameConfigs } from "../../../games/gameConfigs";
 
 export default function GamePage() {
+  const router = useRouter();
   const params = useParams();
   const gameId = params.id as string;
   const gameConfig = gameConfigs.find((game) => game.id === gameId);
+
+  const winCheckRef = useRef<boolean>(false);
 
   // Game state
   const [board, setBoard] = useState<Cell[][]>([]);
@@ -26,6 +29,9 @@ export default function GamePage() {
   const [showDevTools, setShowDevTools] = useState<boolean>(false);
   const [showHowToPlay, setShowHowToPlay] = useState<boolean>(false);
   const [showExamples, setShowExamples] = useState<boolean>(false);
+
+  // Enhanced win notification
+  const [showWinMessage, setShowWinMessage] = useState<boolean>(false);
 
   // Initialize board
   useEffect(() => {
@@ -64,6 +70,14 @@ export default function GamePage() {
       if (interval) clearInterval(interval);
     };
   }, [timerActive, hasWon]);
+
+  useEffect(() => {
+    // Only trigger once when hasWon changes from false to true
+    if (hasWon) {
+      // Set a flag to prevent duplicate modals
+      setShowWinMessage(true);
+    }
+  }, [hasWon]);
 
   if (!gameConfig) {
     return (
@@ -141,9 +155,12 @@ export default function GamePage() {
       }
     }
 
+    let hasConflicts = false; // Track if there are any conflicts
+
     // Mark conflicts by color (more than one queen in same color area)
     Object.values(queensByColor).forEach((positions) => {
       if (positions.length > 1) {
+        hasConflicts = true;
         positions.forEach((pos) => {
           boardCopy[pos.row][pos.col].hasError = true;
         });
@@ -153,6 +170,7 @@ export default function GamePage() {
     // Mark conflicts by row (more than one queen in same row)
     Object.values(queensByRow).forEach((positions) => {
       if (positions.length > 1) {
+        hasConflicts = true;
         positions.forEach((pos) => {
           boardCopy[pos.row][pos.col].hasError = true;
         });
@@ -162,27 +180,40 @@ export default function GamePage() {
     // Mark conflicts by column (more than one queen in same column)
     Object.values(queensByCol).forEach((positions) => {
       if (positions.length > 1) {
+        hasConflicts = true;
         positions.forEach((pos) => {
           boardCopy[pos.row][pos.col].hasError = true;
         });
       }
     });
 
-    // Mark adjacent conflicts (queens that are next to each other)
+    // Mark adjacent conflicts (queens that are next to each other in any direction)
     for (let i = 0; i < queensPositions.length; i++) {
       for (let j = i + 1; j < queensPositions.length; j++) {
         const q1 = queensPositions[i];
         const q2 = queensPositions[j];
 
-        // Check if queens are adjacent (including diagonally adjacent)
+        // Check if queens are adjacent (horizontally, vertically, or diagonally)
         const rowDiff = Math.abs(q1.row - q2.row);
         const colDiff = Math.abs(q1.col - q2.col);
 
+        // Queens are adjacent if they're within 1 cell in any direction
         if (rowDiff <= 1 && colDiff <= 1) {
+          hasConflicts = true;
           boardCopy[q1.row][q1.col].hasError = true;
           boardCopy[q2.row][q2.col].hasError = true;
         }
       }
+    }
+
+    // Log conflicts for debugging
+    if (hasConflicts) {
+      console.log("Conflicts detected:", {
+        queensPositions,
+        queensByColor,
+        queensByRow,
+        queensByCol,
+      });
     }
 
     return boardCopy;
@@ -229,6 +260,8 @@ export default function GamePage() {
     setHasWon(false);
     setTimer(0);
     setTimerActive(true);
+    winCheckRef.current = false; // Reset the win check flag
+    setShowWinMessage(false); // Hide the win message if visible
   };
 
   // Show solution (for development)
@@ -317,18 +350,23 @@ export default function GamePage() {
     // Check: one queen per column
     const correctColCount = queensByCol.every((count) => count <= 1);
 
-    // Check diagonal adjacency
-    let noDiagonalAdjacency = true;
+    // Check for adjacency conflicts (queens next to each other in any direction)
+    let noAdjacentQueens = true;
     for (let i = 0; i < queensPositions.length; i++) {
       for (let j = i + 1; j < queensPositions.length; j++) {
         const q1 = queensPositions[i];
         const q2 = queensPositions[j];
-        if (Math.abs(q1.row - q2.row) === Math.abs(q1.col - q2.col)) {
-          noDiagonalAdjacency = false;
+
+        // Check if queens are adjacent (horizontally, vertically, or diagonally)
+        const rowDiff = Math.abs(q1.row - q2.row);
+        const colDiff = Math.abs(q1.col - q2.col);
+
+        if (rowDiff <= 1 && colDiff <= 1) {
+          noAdjacentQueens = false;
           break;
         }
       }
-      if (!noDiagonalAdjacency) break;
+      if (!noAdjacentQueens) break;
     }
 
     // Check for any cells with errors
@@ -336,17 +374,30 @@ export default function GamePage() {
       (pos) => !currentBoard[pos.row][pos.col].hasError
     );
 
+    // Debugging log
+    console.log("Win condition checks:", {
+      correctColorCount,
+      correctRowCount,
+      correctColCount,
+      noAdjacentQueens,
+      expectedQueens: gameConfig.colors.length,
+      actualQueens: queensPositions.length,
+      noErrors,
+    });
+
     // Win condition: all checks pass and have the right number of queens
     if (
       correctColorCount &&
       correctRowCount &&
       correctColCount &&
-      noDiagonalAdjacency &&
+      noAdjacentQueens &&
       queensPositions.length === gameConfig.colors.length &&
+      !winCheckRef.current && // Only trigger if not already won
       noErrors
     ) {
       setHasWon(true);
       setTimerActive(false);
+      setShowWinMessage(true);
     }
   };
 
@@ -357,6 +408,27 @@ export default function GamePage() {
       {/* Game container */}
       <div className="max-w-md mx-auto px-4 pt-6">
         <Timer timer={timer} onClear={handleClear} />
+
+        {/* Win message */}
+        {showWinMessage && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md animate-fade-in">
+              <h2 className="text-2xl font-bold mb-2">Congratulations!</h2>
+              <p className="mb-4">
+                You solved the puzzle in {formatTime(timer)}!
+              </p>
+              <button
+                onClick={() => {
+                  setShowWinMessage(false);
+                  router.push("/");
+                }}
+                className="px-4 py-2 bg-black text-white rounded-md"
+              >
+                Back to Home
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Confetti container positioned in the center of the screen */}
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
@@ -395,11 +467,18 @@ export default function GamePage() {
         {/* See results button */}
         <button
           className="w-full py-4 bg-black text-white rounded-full mt-6 mb-6 font-bold"
-          onClick={() =>
-            hasWon
-              ? alert("You won! Time: " + formatTime(timer))
-              : alert("Keep trying!")
-          }
+          onClick={() => {
+            // Manually check the board again in case we missed something
+            if (!hasWon) {
+              checkWinCondition(board);
+            }
+
+            if (hasWon) {
+              setShowWinMessage(true);
+            } else {
+              alert("Keep trying! You haven't solved the puzzle yet.");
+            }
+          }}
         >
           See results
         </button>

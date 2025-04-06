@@ -22,7 +22,13 @@ export const HowToPlay = ({ showHowToPlay, onToggle }: HowToPlayProps) => {
             </li>
             <li>• Only one queen per row</li>
             <li>• Only one queen per column</li>
-            <li>• No queens can be placed diagonally adjacent to each other</li>
+            <li>
+              • Queens cannot be placed in adjacent cells (including diagonally
+              adjacent)
+            </li>
+            <li>
+              • Queens can be on the same diagonal if they are not adjacent
+            </li>
             <li>• Each colored area consists of adjacent cells only</li>
             <li>• Tap once to mark a space with an X</li>
             <li>• Tap again to place a queen</li>
