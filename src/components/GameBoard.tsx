@@ -1,5 +1,6 @@
 import { Cell } from "./types";
 import { useState, useCallback, useRef, useEffect } from "react";
+import Image from "next/image";
 
 interface GameBoardProps {
   board: Cell[][];
@@ -22,6 +23,7 @@ export const GameBoard = ({
     col: number;
   } | null>(null);
   const [isProcessingClick, setIsProcessingClick] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   // Add a ref to the board container
   const boardRef = useRef<HTMLDivElement>(null);
@@ -37,6 +39,7 @@ export const GameBoard = ({
     // Function to handle touch move events
     const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
+      e.stopPropagation();
 
       if (!isDragging) return;
 
@@ -46,10 +49,14 @@ export const GameBoard = ({
         touch.clientY
       ) as HTMLElement;
 
-      const cellCoords = element?.getAttribute("data-coords");
+      // Find the closest cell element
+      const cellElement = element?.closest('[data-coords]') as HTMLElement;
+      const cellCoords = cellElement?.getAttribute("data-coords");
+
       if (cellCoords) {
         const [row, col] = cellCoords.split("-").map(Number);
 
+        // Only process if it's a different cell and it's empty
         if (
           lastDraggedCell &&
           (lastDraggedCell.row !== row || lastDraggedCell.col !== col) &&
@@ -61,12 +68,22 @@ export const GameBoard = ({
       }
     };
 
+    // Function to handle touch end
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+      setLastDraggedCell(null);
+    };
+
     // Add event listeners
     boardElement.addEventListener("touchmove", handleTouchMove, options);
+    boardElement.addEventListener("touchend", handleTouchEnd);
+    boardElement.addEventListener("touchcancel", handleTouchEnd);
 
     // Cleanup
     return () => {
       boardElement.removeEventListener("touchmove", handleTouchMove);
+      boardElement.removeEventListener("touchend", handleTouchEnd);
+      boardElement.removeEventListener("touchcancel", handleTouchEnd);
     };
   }, [isDragging, lastDraggedCell, board, onCellClick]);
 
@@ -104,6 +121,9 @@ export const GameBoard = ({
 
   const handleMouseDown = useCallback(
     (row: number, col: number, e: React.MouseEvent) => {
+      // Skip if this is a touch device
+      if (isTouchDevice) return;
+
       // Only handle left mouse button
       if (e.buttons !== 1) return;
 
@@ -119,18 +139,29 @@ export const GameBoard = ({
         handleCellInteraction(row, col, "click");
       }
     },
-    [board, handleCellInteraction]
+    [board, handleCellInteraction, isTouchDevice]
   );
 
   const handleTouchStart = useCallback(
     (row: number, col: number, e: React.TouchEvent) => {
+      // Set touch device flag
+      setIsTouchDevice(true);
+
       // Prevent default behavior
+      e.preventDefault();
       e.stopPropagation();
 
-      // Process the touch as a click
-      handleCellInteraction(row, col, "click");
+      // Only start dragging on empty cells
+      if (board[row][col].state === "empty") {
+        setIsDragging(true);
+        handleCellInteraction(row, col, "drag");
+        setLastDraggedCell({ row, col });
+      } else {
+        // For non-empty cells, just handle it as a regular click
+        handleCellInteraction(row, col, "click");
+      }
     },
-    [handleCellInteraction]
+    [board, handleCellInteraction]
   );
 
   const handleMouseEnter = useCallback(
@@ -253,10 +284,12 @@ export const GameBoard = ({
                           {hasWon ? (
                             // Show crown SVG with animation when game is won
                             <div className="animate-queen-to-crown">
-                              <img
+                              <Image
                                 src="/crown.svg"
                                 alt="Crown"
-                                className="w-6 h-6 animate-bounce-once"
+                                width={24}
+                                height={24}
+                                className="animate-bounce-once"
                               />
                             </div>
                           ) : (
